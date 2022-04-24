@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-function Rightsidebar({ num, selectedtext }) {
+function Rightsidebar({ num, selectedtext, tabledata, settabledata }) {
   const tablehead = ["Text", "Start", "End", ""];
-  const [tabledata, settabledata] = useState([]);
   const [deletedtext, setdeletedtext] = useState(null);
   // const [deletedstart, setdeletedstart] = useState(null);
   // const [deletedend, setdeletedend] = useState(null);
@@ -64,7 +63,11 @@ function Rightsidebar({ num, selectedtext }) {
               >
                 <tr>
                   {tablehead.map((item, index) => (
-                    <th key={index} scope="col" className="px-6 py-3">
+                    <th
+                      key={index}
+                      scope="col"
+                      className="px-6 py-3 font-popp text-lg"
+                    >
                       {item}
                     </th>
                   ))}
@@ -76,7 +79,7 @@ function Rightsidebar({ num, selectedtext }) {
                     key={index}
                     className="border-b dark:bg-gray-800 dark:border-gray-700 
               odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 
-              even:dark:bg-gray-700"
+              even:dark:bg-gray-700 font-robo"
                   >
                     <th
                       scope="row"

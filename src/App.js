@@ -6,6 +6,7 @@ import "./index.css";
 function App() {
   const [middletext, setmiddletext] = useState("");
   const [selectedtext, setselectedtext] = useState("");
+  const [tabledata, settabledata] = useState([]);
   const [selectedtextstart, setselectedtextstart] = useState(0);
   const [selectedtextend, setselectedtextend] = useState(0);
   const [text, settext] = useState([]);
@@ -22,7 +23,7 @@ function App() {
   const [num, setnum] = useState(null);
   return (
     <div className="App">
-      <div className="overflow-y-auto absolute left-0 w-[20vw] bg-[rgb(26,17,16)] text-white h-[100vh]">
+      <div className="overflow-y-auto absolute left-0 w-[20vw] bg-[rgb(15,23,42)] text-white h-[100vh]">
         <Leftsidebar
           text={text}
           num={num}
@@ -37,11 +38,17 @@ function App() {
           num={num}
           setselectedtext={setselectedtext}
           setselectedtextend={setselectedtextend}
+          tabledata={tabledata}
           setselectedtextstart={setselectedtextstart}
         />
       </div>
       <div className="overflow-y-auto absolute right-0 w-[40vw] h-[100vh] bg-[rgb(15,23,42)]">
-        <Rightsidebar num={num} selectedtext={selectedtext} />
+        <Rightsidebar
+          num={num}
+          selectedtext={selectedtext}
+          tabledata={tabledata}
+          settabledata={settabledata}
+        />
       </div>
     </div>
   );
