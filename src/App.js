@@ -41,7 +41,7 @@ function App() {
         />
       </div>
       <div className="overflow-y-auto absolute right-0 w-[40vw] h-[100vh] bg-[rgb(15,23,42)]">
-        <Rightsidebar num={num} />
+        <Rightsidebar num={num} selectedtext={selectedtext} />
       </div>
     </div>
   );

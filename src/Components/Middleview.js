@@ -38,7 +38,9 @@ function Middleview({
         },
         body: JSON.stringify(requestObj),
       }).then((res) => {
-        console.log(res);
+        if (res.ok) {
+          setselectedtext(null);
+        }
       });
     }
   };

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-function Rightsidebar({ num }) {
+function Rightsidebar({ num, selectedtext }) {
   const tablehead = ["Text", "Start", "End", ""];
   const [tabledata, settabledata] = useState([]);
-  // const [deletedtext, setdeletedtext] = useState(null);
+  const [deletedtext, setdeletedtext] = useState(null);
   // const [deletedstart, setdeletedstart] = useState(null);
   // const [deletedend, setdeletedend] = useState(null);
   useEffect(() => {
@@ -16,13 +16,15 @@ function Rightsidebar({ num }) {
         }
       });
     }
-  }, [num]);
+  }, [num, selectedtext, deletedtext]);
   const deleteItem = (text, end, start) => {
     const deleteObj = {
       deletedtext: text,
       deletedstart: start,
       deletedend: end,
     };
+    setdeletedtext(text);
+
     if (num) {
       fetch(`http://127.0.0.1:5000/api/deletehighlight/${num}`, {
         method: "POST",
@@ -34,6 +36,7 @@ function Rightsidebar({ num }) {
         if (res.ok) {
           // res.json()
           // console.log(res);
+          setdeletedtext(null);
           alert("Your unwanted highlight is being deleted");
         }
       });
