@@ -8,13 +8,6 @@ function Middleview({
   setselectedtextend,
 }) {
   const selecttext = (event) => {
-    // console.log(
-    //   "text selected is : ",
-    //   event.target.value.substring(
-    //     event.target.selectionStart,
-    //     event.target.selectionEnd
-    //   )
-    // );
     setselectedtext(
       event.target.value.substring(
         event.target.selectionStart,
@@ -23,6 +16,31 @@ function Middleview({
     );
     setselectedtextstart(event.target.selectionStart);
     setselectedtextend(event.target.selectionEnd);
+    const requestObj = {
+      sno: num.toString(),
+      highlight: event.target.value.substring(
+        event.target.selectionStart,
+        event.target.selectionEnd
+      ),
+      start: event.target.selectionStart,
+      end: event.target.selectionEnd,
+    };
+    if (
+      event.target.value.substring(
+        event.target.selectionStart,
+        event.target.selectionEnd
+      ) != ""
+    ) {
+      fetch("http://127.0.0.1:5000/api/addHighlight", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(requestObj),
+      }).then((res) => {
+        console.log(res);
+      });
+    }
   };
   return (
     <div>
