@@ -1,43 +1,56 @@
 import React, { useEffect, useState } from "react";
-import Highlighter from "react-highlight-words";
+import { Selection } from "react-highlight-within-textarea";
+import { HighlightWithinTextarea } from "react-highlight-within-textarea";
 function Middleview({
   middletext,
   num,
   setselectedtext,
+  selectedtext,
   setselectedtextstart,
   setselectedtextend,
+  selectedtextend,
+  selectedtextstart,
   tabledata,
 }) {
-  const searchwords = [];
+  const words = [[]];
   for (let index = 0; index < tabledata.length; index++) {
     const element = tabledata[index];
-    searchwords.push(element["highlight"]);
+    words.push([element["start"], element["end"]]);
   }
-  const [highlighter, sethighlighter] = useState(false);
-  const selecttext = (event) => {
-    setselectedtext(
-      event.target.value.substring(
-        event.target.selectionStart,
-        event.target.selectionEnd
-      )
-    );
-    setselectedtextstart(event.target.selectionStart);
-    setselectedtextend(event.target.selectionEnd);
+  let [state, setState] = useState(() => ({
+    anchor: 0,
+    focus: 0,
+    selection: undefined,
+  }));
+  const onChange = (value, selection) => {
+    const { anchor, focus } = selection;
+    console.log(anchor, focus);
+    if (anchor !== focus) {
+      if (anchor > focus) {
+        if (anchor !== selectedtextstart && focus !== selectedtextend) {
+          setselectedtext(middletext.slice(focus, anchor));
+          setselectedtextstart(focus);
+          setselectedtextend(anchor);
+        } else {
+          setselectedtext(null);
+        }
+      } else {
+        if (anchor !== selectedtextstart && focus !== selectedtextend) {
+          setselectedtext(middletext.slice(anchor, focus));
+          setselectedtextstart(anchor);
+          setselectedtextend(focus);
+        } else {
+          setselectedtext(null);
+        }
+      }
+    }
     const requestObj = {
       sno: num.toString(),
-      highlight: event.target.value.substring(
-        event.target.selectionStart,
-        event.target.selectionEnd
-      ),
-      start: event.target.selectionStart,
-      end: event.target.selectionEnd,
+      highlight: selectedtext,
+      start: selectedtextstart,
+      end: selectedtextend,
     };
-    if (
-      event.target.value.substring(
-        event.target.selectionStart,
-        event.target.selectionEnd
-      ) !== ""
-    ) {
+    if (selection && requestObj.highlight && requestObj.highlight != " ") {
       fetch("http://127.0.0.1:5000/api/addHighlight", {
         method: "POST",
         headers: {
@@ -46,10 +59,13 @@ function Middleview({
         body: JSON.stringify(requestObj),
       }).then((res) => {
         if (res.ok) {
+          // setState({ anchor: 0, focus: 0, selection: undefined });
           setselectedtext(null);
         }
       });
     }
+    setState({ anchor: 0, focus: 0, selection: undefined });
+    return value;
   };
   return (
     <div>
@@ -59,30 +75,12 @@ function Middleview({
       <div className="mt-5 font-robo font-mediumbold mx-5">
         {middletext ? (
           <div>
-            {highlighter ? (
-              <Highlighter
-                highlightClassName="YourHighlightClass"
-                searchWords={searchwords}
-                autoEscape={true}
-                textToHighlight={middletext}
-              />
-            ) : (
-              <textarea
-                name="textselection"
-                id="textselection"
-                className="w-[100%] h-[80vh] border-none focus:outline-none"
-                value={middletext}
-                // onBlur={() => sethighlighter(true)}
-                onSelect={(event) => selecttext(event)}
-              ></textarea>
-            )}
-            <button
-              className="fixed bottom-2 right-[44vw] bg-blue-500
-             hover:bg-blue-700 text-white font-bold py-2 px-4 rounded z-[10000]"
-              onClick={() => sethighlighter((prev) => !prev)}
-            >
-              {highlighter ? "Highlight text" : "Highlighted text"}
-            </button>
+            <HighlightWithinTextarea
+              value={middletext}
+              highlight={words}
+              onChange={onChange}
+              selection={state.selection}
+            />
           </div>
         ) : (
           <h1 className="font-popp text-2xl font-semibold">

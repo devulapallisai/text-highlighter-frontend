@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import "./index.css";
 function App() {
   const [middletext, setmiddletext] = useState("");
-  const [selectedtext, setselectedtext] = useState("");
+  const [selectedtext, setselectedtext] = useState(null);
   const [tabledata, settabledata] = useState([]);
   const [selectedtextstart, setselectedtextstart] = useState(0);
   const [selectedtextend, setselectedtextend] = useState(0);
@@ -36,9 +36,12 @@ function App() {
         <Middleview
           middletext={middletext}
           num={num}
+          selectedtextstart={selectedtextstart}
+          selectedtextend={selectedtextend}
           setselectedtext={setselectedtext}
           setselectedtextend={setselectedtextend}
           tabledata={tabledata}
+          selectedtext={selectedtext}
           setselectedtextstart={setselectedtextstart}
         />
       </div>
